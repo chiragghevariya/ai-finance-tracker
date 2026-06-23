@@ -1,0 +1,40 @@
+name: ai_finance_tracker
+description: "AI-powered personal finance tracker — Flutter front-end."
+# Prevents accidental publishing to pub.dev (this is an app, not a package).
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  # Flutter 3.x ships Dart 3.x.
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # --- Networking ---
+  dio: ^5.4.0                  # HTTP client (we attach the JWT via an interceptor)
+
+  # --- State management ---
+  provider: ^6.1.2             # simple, official state management
+
+  # --- Charts ---
+  fl_chart: ^0.68.0            # pie chart for the spending breakdown
+
+  # --- Camera / images (used by the receipt scanner in Phase 4) ---
+  camera: ^0.10.5+9
+  image_picker: ^1.0.7
+
+  # --- Formatting & storage ---
+  intl: ^0.19.0                # money & date formatting
+  shared_preferences: ^2.2.2   # stores the JWT token on the device
+  cached_network_image: ^3.3.1 # cached receipt thumbnails
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
