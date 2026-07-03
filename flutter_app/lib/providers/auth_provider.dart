@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
 import '../services/api_service.dart';
+import '../services/db_service.dart';
 
 /// Whether we know if the user is logged in yet.
 enum AuthStatus { unknown, authenticated, unauthenticated }
@@ -72,22 +73,19 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> logout() async {
     await _api.logout();
+    await DbService.instance.clearAll();
     _user = null;
     _setStatus(AuthStatus.unauthenticated);
   }
 
   /// Update the monthly budget.
-  ///
-  /// NOTE: The backend doesn't have an "update profile" endpoint yet, so for the
-  /// demo we save the budget on the device (shared_preferences) and update the
-  /// in-memory user. Wire this to a real `PUT /api/profile` endpoint later.
-  Future<void> updateMonthlyBudget(double budget) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble('monthly_budget', budget);
-    if (_user != null) {
-      _user = _user!.copyWith(monthlyBudget: budget);
-    }
-    notifyListeners();
+  Future<bool> updateMonthlyBudget(double budget) {
+    return _run(() async {
+      final data = await _api.updateProfile(monthlyBudget: budget);
+      _user = User.fromJson(data);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble('monthly_budget', budget);
+    });
   }
 
   /// If the user previously set a budget locally, apply it over the API value.

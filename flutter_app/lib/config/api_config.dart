@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 /// Central place for all backend/API configuration.
 ///
 /// This class only holds constants, so it has a private constructor and is
@@ -14,13 +16,21 @@ class ApiConfig {
   ///   • Real device      : http://<your-PC-LAN-IP>:8000   (e.g. 192.168.1.50)
   ///
   /// Start the backend first with:  php artisan serve   (defaults to port 8000)
-  static const String baseUrl = 'http://10.0.2.2:8000/api';
+  static String get baseUrl {
+    // When running on the web (e.g. Chrome), use localhost so it routes to the local server
+    if (kIsWeb) {
+      return 'http://localhost:8000/api';
+    }
+    // When running on a mobile device (real phone or emulator), use the Mac LAN IP
+    return 'http://192.168.1.3:8000/api';
+  }
 
   // --- Endpoint paths (defined once so we never mistype them) ---
   static const String register = '/register';
   static const String login = '/login';
   static const String logout = '/logout';
   static const String me = '/me';
+  static const String profile = '/profile';
 
   static const String transactions = '/transactions';
   static const String summary = '/transactions/summary';

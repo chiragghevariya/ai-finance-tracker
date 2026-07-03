@@ -1,3 +1,4 @@
+import '../config/api_config.dart';
 import '../utils/parsers.dart';
 import 'category.dart';
 
@@ -32,6 +33,14 @@ class TransactionModel {
 
   bool get isIncome => type == 'income';
   bool get isExpense => type == 'expense';
+
+  String? get receiptImageUrl {
+    if (receiptImage == null || receiptImage!.isEmpty) return null;
+    if (receiptImage!.startsWith('http')) return receiptImage;
+    // Replace "/api" suffix with "/storage" to get Laravel public storage path
+    final base = ApiConfig.baseUrl.replaceAll('/api', '/storage');
+    return '$base/$receiptImage';
+  }
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(

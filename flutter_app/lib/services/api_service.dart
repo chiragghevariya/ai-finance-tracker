@@ -116,6 +116,14 @@ class ApiService {
     return res.data as Map<String, dynamic>;
   }
 
+  Future<Map<String, dynamic>> updateProfile({String? name, double? monthlyBudget}) async {
+    final res = await _send(() => _dio.put(ApiConfig.profile, data: {
+          if (name != null) 'name': name,
+          if (monthlyBudget != null) 'monthly_budget': monthlyBudget,
+        }));
+    return res.data as Map<String, dynamic>;
+  }
+
   Future<void> logout() async {
     // Best-effort: tell the server, but always clear locally even if offline.
     try {
@@ -139,8 +147,18 @@ class ApiService {
     return (body['data'] as List<dynamic>?) ?? <dynamic>[];
   }
 
-  Future<Map<String, dynamic>> createTransaction(Map<String, dynamic> body) async {
-    final res = await _send(() => _dio.post(ApiConfig.transactions, data: body));
+  Future<Map<String, dynamic>> createTransaction(Map<String, dynamic> body, {List<int>? imageBytes}) async {
+    dynamic requestData = body;
+    if (imageBytes != null && imageBytes.isNotEmpty) {
+      requestData = FormData.fromMap({
+        ...body,
+        'receipt_image': MultipartFile.fromBytes(
+          imageBytes,
+          filename: 'receipt.jpg',
+        ),
+      });
+    }
+    final res = await _send(() => _dio.post(ApiConfig.transactions, data: requestData));
     return res.data as Map<String, dynamic>;
   }
 

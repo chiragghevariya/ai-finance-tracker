@@ -75,6 +75,23 @@ class AuthController extends Controller
     }
 
     /**
+     * PUT /api/profile
+     * Update the currently authenticated user's details (like monthly_budget).
+     */
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'name'           => ['sometimes', 'required', 'string', 'max:255'],
+            'monthly_budget' => ['sometimes', 'nullable', 'numeric', 'min:0'],
+        ]);
+
+        $user = auth('api')->user();
+        $user->update($data);
+
+        return response()->json($user);
+    }
+
+    /**
      * POST /api/logout
      * Invalidate the current token so it can no longer be used.
      */

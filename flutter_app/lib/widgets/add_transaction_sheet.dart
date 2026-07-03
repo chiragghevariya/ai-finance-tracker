@@ -214,6 +214,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
       description: _descriptionController.text.trim(),
       date: _date,
       categoryId: _categoryId,
+      imageBytes: _receiptBytes,
     );
 
     if (!mounted) return;

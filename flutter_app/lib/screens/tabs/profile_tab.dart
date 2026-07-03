@@ -120,10 +120,12 @@ class ProfileTab extends StatelessWidget {
     );
 
     if (newBudget != null) {
-      await auth.updateMonthlyBudget(newBudget);
+      final success = await auth.updateMonthlyBudget(newBudget);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Budget updated')),
+          SnackBar(
+            content: Text(success ? 'Budget updated ✓' : (auth.error ?? 'Failed to update budget')),
+          ),
         );
       }
     }

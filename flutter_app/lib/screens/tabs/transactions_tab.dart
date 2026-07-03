@@ -6,6 +6,7 @@ import '../../models/transaction.dart';
 import '../../providers/transaction_provider.dart';
 import '../../utils/formatters.dart';
 import '../../widgets/transaction_card.dart';
+import '../transaction_detail_screen.dart';
 
 /// Tab 2 — the full transaction list with a month selector and type filter.
 class TransactionsTab extends StatelessWidget {
@@ -147,7 +148,10 @@ class _TransactionList extends StatelessWidget {
             ),
             confirmDismiss: (_) => _confirmDelete(context),
             onDismissed: (_) => provider.deleteTransaction(t.id),
-            child: TransactionCard(transaction: t),
+            child: TransactionCard(
+              transaction: t,
+              onTap: () => TransactionDetailScreen.navigate(context, t),
+            ),
           );
         },
       ),

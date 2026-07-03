@@ -31,6 +31,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Auth helpers
     Route::get('/me', [AuthController::class, 'me']);
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Transactions.

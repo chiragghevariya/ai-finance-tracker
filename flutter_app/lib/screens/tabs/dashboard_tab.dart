@@ -7,6 +7,7 @@ import '../../utils/formatters.dart';
 import '../../widgets/balance_card.dart';
 import '../../widgets/category_pie_chart.dart';
 import '../../widgets/transaction_card.dart';
+import '../transaction_detail_screen.dart';
 
 /// Tab 1 — an overview: balance card, spending pie chart, recent transactions.
 class DashboardTab extends StatelessWidget {
@@ -66,7 +67,10 @@ class DashboardTab extends StatelessWidget {
                     ),
                   )
                 else
-                  ...recent.map((t) => TransactionCard(transaction: t)),
+                  ...recent.map((t) => TransactionCard(
+                        transaction: t,
+                        onTap: () => TransactionDetailScreen.navigate(context, t),
+                      )),
 
                 const SizedBox(height: 80), // space so the FAB doesn't overlap
               ],
